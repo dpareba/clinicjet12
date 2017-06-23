@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('token')->nullable();
             $table->string('avatar')->default('default.jpg');
             $table->string('phone');
+            $table->string('pan')->nullable();
             $table->string('doctype');
             $table->boolean('isActivated')->default(false);
             $table->boolean('isClinicAdmin')->default(false);

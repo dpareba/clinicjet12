@@ -85,7 +85,7 @@ class VisitController extends Controller
      // if ($request->has('medid')) {
      //    return 'Hello';
      // }
-     //dd($request);
+        //dd($request);
 
        if ($request->followuptype == "SOS") {
         // if (($request->systolic=="" && $request->diastolic!="")||($request->systolic!="" && $request->diastolic=="")) {

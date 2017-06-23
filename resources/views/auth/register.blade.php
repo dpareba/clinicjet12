@@ -102,6 +102,20 @@
                 </div>
             </div>
 
+            <div class="form-group{{ $errors->has('pan') ? ' has-error' : '' }}">
+                <label for="pan" class="col-md-4 control-label">PAN Number</label>
+
+                <div class="col-md-6">
+                    <input id="pan" type="text"   data-parsley-pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/" style="text-transform: uppercase;" class="form-control" name="pan" value="{{ old('pan') }}"  data-parsley-pattern-message="*Invalid PAN Number" placeholder="PAN Number">
+
+                    @if ($errors->has('pan'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('pan') }}</strong>
+                    </span>
+                    @endif
+                </div>
+            </div>
+
                          {{-- <div class="form-group{{ $errors->has('passkey') ? ' has-error' : '' }}">
                             <label for="passkey" class="col-md-4 control-label">Passkey</label>
 
