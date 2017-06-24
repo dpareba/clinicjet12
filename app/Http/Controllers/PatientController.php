@@ -16,6 +16,7 @@ use Illuminate\Support\Str; //Added
 use App\State;
 use Charts;
 use App\Visit;
+use App\Template;
 
 class PatientController extends Controller
 {
@@ -200,7 +201,7 @@ class PatientController extends Controller
         $user = User::find($patient->created_by);
         //$pathologies = Pathology::all();
         $pathologies = Pathology::where('user_id','=','1')->orWhere('user_id','=',Auth::user()->id)->get();
-
+        $templates = Template::where('user_id','=',Auth::user()->id)->get();
         $data = Visit::where('patient_id','=',$patient->id)->where('systolic','!=','')->where('diastolic','!=','')->get();
 
         $chart = Charts::multi('areaspline','highcharts')
@@ -217,7 +218,7 @@ class PatientController extends Controller
                         ->responsive(false)
                         ;
 
-        return view('patients.createconsult')->withPatient($patient)->withUser($user)->withPathologies($pathologies)->withChart($chart);
+        return view('patients.createconsult')->withPatient($patient)->withUser($user)->withPathologies($pathologies)->withChart($chart)->withTemplates($templates);
     }
     /**
      * Display the specified resource.

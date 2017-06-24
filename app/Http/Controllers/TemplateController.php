@@ -26,10 +26,10 @@ class TemplateController extends Controller
     }
 
     public function showcc(Request $request){
-       $term = $request->term;
-       $templates = Template::where('template','LIKE','%'.$term.'%')->where('templatetype','=','CC')->where('user_id','=',Auth::user()->id)->get();
+     $term = $request->term;
+     $templates = Template::where('template','LIKE','%'.$term.'%')->where('templatetype','=','CC')->where('user_id','=',Auth::user()->id)->get();
 
-       if (count($templates)==0) {
+     if (count($templates)==0) {
         $searchResult[] = "No Templates Found";
     }else{
         foreach ($templates as $t) {
@@ -39,65 +39,80 @@ class TemplateController extends Controller
     return $searchResult;
 }
 
-    public function storecc(Request $request){
+public function storecc(Request $request){
 
-        $this->validate($request,[
-            'templatename'=>'required|unique:templates,templatename',
-            'template'=>'required|unique:templates,template'
-            ],[
-            'templatename.required'=>'Template Name cannot be left blank',
-            'templatename.unique'=>'A Template by this name already exists',
-            'template.required'=>'New Template cannot be left blank',
-            'template.unique'=>'This Template alredy exists'
-            ]);
+    $this->validate($request,[
+        'templatename'=>'required|unique:templates,templatename',
+        'template'=>'required|unique:templates,template'
+        ],[
+        'templatename.required'=>'Template Name cannot be left blank',
+        'templatename.unique'=>'A Template by this name already exists',
+        'template.required'=>'New Template cannot be left blank',
+        'template.unique'=>'This Template alredy exists'
+        ]);
 
-        $template = new Template;
-        $template->templatename = Str::upper($request->templatename);
-        $template->templatetype = "CC";
-        $template->template = Str::upper($request->template);
-        $template->user_id = Auth::user()->id;
+    $template = new Template;
+    $template->templatename = Str::upper($request->templatename);
+    $template->templatetype = "CC";
+    $template->template = Str::upper($request->template);
+    $template->user_id = Auth::user()->id;
 
-        $template->save();
+    $template->save();
 
-       
+
+
+}
+
+public function showef(Request $request){
+ $term = $request->term;
+ $templates = Template::where('template','LIKE','%'.$term.'%')->where('templatetype','=','EF')->where('user_id','=',Auth::user()->id)->get();
+
+ if (count($templates)==0) {
+    $searchResult[] = "No Templates Found";
+}else{
+    foreach ($templates as $t) {
+        $searchResult[] = $t->template;
     }
-
-    public function showef(Request $request){
-       $term = $request->term;
-       $templates = Template::where('template','LIKE','%'.$term.'%')->where('templatetype','=','EF')->where('user_id','=',Auth::user()->id)->get();
-
-       if (count($templates)==0) {
-        $searchResult[] = "No Templates Found";
-    }else{
-        foreach ($templates as $t) {
-            $searchResult[] = $t->template;
-        }
-    }
-    return $searchResult;
+}
+return $searchResult;
 }
 
 public function storeef(Request $request){
 
-        $this->validate($request,[
-            'templatenameef'=>'required|unique:templates,templatename',
-            'templateef'=>'required|unique:templates,template'
-            ],[
-            'templatenameef.required'=>'Template Name cannot be left blank',
-            'templatenameef.unique'=>'A Template by this name already exists',
-            'templateef.required'=>'New Template cannot be left blank',
-            'templateef.unique'=>'This Template alredy exists'
-            ]);
+    $this->validate($request,[
+        'templatenameef'=>'required|unique:templates,templatename',
+        'templateef'=>'required|unique:templates,template'
+        ],[
+        'templatenameef.required'=>'Template Name cannot be left blank',
+        'templatenameef.unique'=>'A Template by this name already exists',
+        'templateef.required'=>'New Template cannot be left blank',
+        'templateef.unique'=>'This Template alredy exists'
+        ]);
 
-        $template = new Template;
-        $template->templatename = Str::upper($request->templatenameef);
-        $template->templatetype = "EF";
-        $template->template = Str::upper($request->templateef);
-        $template->user_id = Auth::user()->id;
+    $template = new Template;
+    $template->templatename = Str::upper($request->templatenameef);
+    $template->templatetype = "EF";
+    $template->template = Str::upper($request->templateef);
+    $template->user_id = Auth::user()->id;
 
-        $template->save();
+    $template->save();
 
-       
+    $templates = Template::where('templatetype','=','EF')->where('user_id','=',Auth::user()->id)->get();
+    if (count($templates)>0) {
+        foreach ($templates as $t) {
+            $ter[]=['id'=>$t->id,'templatename'=>$t->templatename];
+        }
     }
+
+    //return $ter;
+    return response()->json($ter);
+    
+//     return response()->json([
+//     'name' => 'Abigail',
+//     'state' => 'CA'
+// ]);
+
+}
 
     /**
      * Show the form for creating a new resource.

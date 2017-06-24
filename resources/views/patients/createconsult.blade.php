@@ -88,7 +88,7 @@ Add Consultation for Patient Visit
 						{{csrf_field()}}
 						<input type="hidden" name="patient_id" value="{{$patient->id}}">
 
-								
+
 						<div class="row">
 							<div class="col-md-6 col-xs-12">
 								<div class="form-group {{ $errors->has('chiefcomplaints')?'has-error':''}}">
@@ -126,10 +126,13 @@ Add Consultation for Patient Visit
 									<div class="form-group {{ $errors->has('examinationfindings')?'has-error':''}}">
 										<label class="control-label" for="examinationfindings">Examination Findings</label>
 										<div class="pull-right box-tools">
-											<select class="input-xs" style="height: 25px; line-height: 25px;" name="" id="">
-												<option value="" selected="">None</option>
-												<option value="">Diabetes</option>
-												<option value="">Blood Pressure</option>
+											<select class="input-xs" style="height: 25px; line-height: 25px;" name="" id="templatename">
+												<option value="None"  selected="">None</option>
+												@foreach ($templates as $t)
+												<option value="{{$t->templatename}}">{{$t->templatename}}</option>
+												@endforeach
+												{{-- <option value="">Diabetes</option>
+												<option value="">Blood Pressure</option> --}}
 											</select>
 											{{-- <a href="" type="button" id="ccadd" style="color: gray;" data-toggle="modal" da><i class="fa fa-plus"></i></a> --}}
 											{{-- <a type="button"  href=""> --}}
@@ -158,7 +161,7 @@ Add Consultation for Patient Visit
 									</div>
 								</div>
 
-								
+
 								<div class="col-md-6 col-xs-12">
 									<div class="form-group {{ $errors->has('diagnosis')?'has-error':''}}">
 										<label class="control-label" for="diagnosis">Diagnosis</label>
@@ -1586,19 +1589,44 @@ $('#addeftemplate').click(function(e){
 		data: $("form.formef").serialize(),
 		success: function(response){
 			$("#efModal").modal('hide');
-		},
-		error: function(data){
-			var obj = jQuery.parseJSON(data.responseText);
-			if(obj.templatenameef){
-				$("#templatenameef-error-label").addClass("has-warning");
-				$('#templatenameef-error').html(obj.templatenameef);
+			console.log(JSON.stringify(response));
+			//var obj = jQuery.parseJSON(response.responseText);
+			//console.log(obj);
+			//$templates = JSON.stringify(response);
+			//console.log($templates);
+			console.log(response.length);
+			if (response.length > 0) {
+				$('#templatename').empty();
+				$('#templatename').append('<option value="None"  selected="">None</option>');
+				for(i=0; i<response.length; i++){
+			 		//var option = '<option value="'+response[i]['id']'+'">'+  selected="">None</option>';
+			 		$('#templatename').append('<option value="'+response[i]['id']+'">'+response[i]['templatename']+'</option>');
+			 		console.log(response[i]['id']);
+			 	}
+			 }else{
+			 	$('#templatename').empty();
+			 	$('#templatename').append('<option value="None" selected="">None</option>');
+			 }
+
+			},
+			error: function(data){
+				console.log(data.responseText);
+				var obj = jQuery.parseJSON(data.responseText);
+				if(obj.templatenameef){
+					$("#templatenameef-error-label").addClass("has-warning");
+					$('#templatenameef-error').html(obj.templatenameef);
+				}
+				if (obj.templateef) {
+					$("#templateef-error-label").addClass("has-warning");
+					$('#templateef-error').html(obj.templateef);
+				}
 			}
-			if (obj.templateef) {
-				$("#templateef-error-label").addClass("has-warning");
-				$('#templateef-error').html(obj.templateef);
-			}
-		}
-	});
+		});
+});
+
+$('#efModal').on('hidden.bs.modal',function(){
+	$(this).find("label").val('').end();
+	$(this).find("textarea").val('').end();
 });
 
 // $("#addpath").click(function(e){
