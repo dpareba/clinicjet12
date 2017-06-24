@@ -126,7 +126,7 @@ Add Consultation for Patient Visit
 									<div class="form-group {{ $errors->has('examinationfindings')?'has-error':''}}">
 										<label class="control-label" for="examinationfindings">Examination Findings</label>
 										<div class="pull-right box-tools">
-											<select class="input-xs" style="height: 25px; line-height: 25px;" name="" id="templatename">
+											<select class="input-xs"  style="height: 25px; line-height: 25px;" name="" id="templatename">
 												<option value="None"  selected="">None</option>
 												@foreach ($templates as $t)
 												<option value="{{$t->templatename}}">{{$t->templatename}}</option>
@@ -925,7 +925,7 @@ Add Consultation for Patient Visit
 															<label class="control-label" for="templateef">Examination Findings Template</label>
 															<div class="input-group">
 																<span class="input-group-addon"><i class="fa fa-plus-square"></i></span>
-																<textarea event.preventDefault(); class="form-control" style="text-transform: uppercase;" id="templateef" name="templateef" id="templateef" cols="30" rows="5"></textarea>
+																<textarea event.preventDefault(); class="form-control" style="resize: none; text-transform: uppercase;" id="templateef" name="templateef" id="templateef" cols="30" rows="5"></textarea>
 
 															</div>
 															<span id="templateef-error" class="help-block"></span>
@@ -1594,19 +1594,21 @@ $('#addeftemplate').click(function(e){
 			//console.log(obj);
 			//$templates = JSON.stringify(response);
 			//console.log($templates);
+			//
 			console.log(response.length);
-			if (response.length > 0) {
+			 if (response.length > 0) {
 				$('#templatename').empty();
-				$('#templatename').append('<option value="None"  selected="">None</option>');
-				for(i=0; i<response.length; i++){
-			 		//var option = '<option value="'+response[i]['id']'+'">'+  selected="">None</option>';
+				//$('#templatename1').hide();
+				$('#templatename').append('<option value="None"  selected="">Hello</option>');
+			 	for(i=0; i<response.length; i++){
+			 		
 			 		$('#templatename').append('<option value="'+response[i]['id']+'">'+response[i]['templatename']+'</option>');
-			 		console.log(response[i]['id']);
+			  		console.log(response[i]['id']);
 			 	}
-			 }else{
-			 	$('#templatename').empty();
-			 	$('#templatename').append('<option value="None" selected="">None</option>');
-			 }
+			  }else{
+			  	$('#templatename').empty();
+			 	$('#templatename').append('<option value="None" selected="">else</option>');
+			  }
 
 			},
 			error: function(data){
@@ -1627,6 +1629,33 @@ $('#addeftemplate').click(function(e){
 $('#efModal').on('hidden.bs.modal',function(){
 	$(this).find("label").val('').end();
 	$(this).find("textarea").val('').end();
+});
+
+$('#templatename').change(function(e){
+	$(this).find("option:selected").each(function(){
+		var optVal = $(this).attr("value");
+		console.log(optVal);
+		if(optVal == "None"){
+			$('#examinationfindings').val("");
+		}else{
+			e.preventDefault();
+			$.ajax({
+				type: "GET",
+				url : "/showef",
+				data : {opt : optVal},
+				
+				success: function(response){
+					console.log(JSON.stringify(response));
+					console.log(response[0]['template']);
+					$('#examinationfindings').val("");
+					$('#examinationfindings').val(response[0]['template']);
+				},
+				error: function(data){
+
+				}
+			});
+		}
+	});
 });
 
 // $("#addpath").click(function(e){

@@ -7,6 +7,7 @@ use App\Template;
 use Auth;
 use Illuminate\Support\Str; //Added
 use Session;
+use Illuminate\Support\Facades\Input;
 
 class TemplateController extends Controller
 {
@@ -64,17 +65,25 @@ public function storecc(Request $request){
 }
 
 public function showef(Request $request){
- $term = $request->term;
- $templates = Template::where('template','LIKE','%'.$term.'%')->where('templatetype','=','EF')->where('user_id','=',Auth::user()->id)->get();
 
- if (count($templates)==0) {
-    $searchResult[] = "No Templates Found";
-}else{
-    foreach ($templates as $t) {
-        $searchResult[] = $t->template;
-    }
-}
-return $searchResult;
+
+$id = Input::get('opt');
+//return $id;
+//dd($term);
+$template = Template::where('templatetype','=','EF')->where('user_id','=',Auth::user()->id)->where('templatename','=',$id)->get();
+return response()->json($template);
+//  $term = $request->term;
+//  $templates = Template::where('template','LIKE','%'.$term.'%')->where('templatetype','=','EF')->where('user_id','=',Auth::user()->id)->get();
+
+//  if (count($templates)==0) {
+//     $searchResult[] = "No Templates Found";
+// }else{
+//     foreach ($templates as $t) {
+//         $searchResult[] = $t->template;
+//     }
+// }
+//return $searchResult;
+
 }
 
 public function storeef(Request $request){
