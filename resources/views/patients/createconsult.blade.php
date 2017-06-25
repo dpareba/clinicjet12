@@ -1599,10 +1599,10 @@ $('#addeftemplate').click(function(e){
 			 if (response.length > 0) {
 				$('#templatename').empty();
 				//$('#templatename1').hide();
-				$('#templatename').append('<option value="None"  selected="">Hello</option>');
+				$('#templatename').append('<option value="None"  selected="">None</option>');
 			 	for(i=0; i<response.length; i++){
 			 		
-			 		$('#templatename').append('<option value="'+response[i]['id']+'">'+response[i]['templatename']+'</option>');
+			 		$('#templatename').append('<option value="'+response[i]['templatename']+'">'+response[i]['templatename']+'</option>');
 			  		console.log(response[i]['id']);
 			 	}
 			  }else{
