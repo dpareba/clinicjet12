@@ -1627,7 +1627,8 @@ $('#addeftemplate').click(function(e){
 });
 
 $('#efModal').on('hidden.bs.modal',function(){
-	$(this).find("label").val('').end();
+	//$(this).find("label").val('').end();
+	$('#templatenameef').val('');
 	$(this).find("textarea").val('').end();
 });
 
